@@ -1,14 +1,9 @@
 
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp, getApps } from 'firebase/app';
 import { 
   getAuth, 
   GoogleAuthProvider, 
-  signInWithPopup, 
-  onAuthStateChanged, 
-  signOut,
   User,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { 
   getFirestore, 
@@ -24,21 +19,34 @@ import {
   limit, 
   getDocs,
   addDoc,
-  runTransaction
 } from 'firebase/firestore';
 import { UserProfile, GeneratedImage, PaymentRecord } from '../types';
 import { INITIAL_FREE_CREDITS, ADMIN_EMAIL, ADMIN_INITIAL_CREDITS } from '../constants';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "YOUR_AUTH_DOMAIN",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  // Use import.meta.env for Vite projects to ensure correct injection of build-time variables
+  // Cast import.meta to any to resolve TS error: Property 'env' does not exist on type 'ImportMeta'
+  apiKey: (import.meta as any).env.VITE_FIREBASE_API_KEY,
+  authDomain: (import.meta as any).env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: (import.meta as any).env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: (import.meta as any).env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: (import.meta as any).env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: (import.meta as any).env.VITE_FIREBASE_APP_ID,
+  measurementId: (import.meta as any).env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+// Defensive check: Firebase throws 'auth/invalid-api-key' if apiKey is undefined or "undefined"
+if (!firebaseConfig.apiKey) {
+  const errorMessage = "Vindra AI: Firebase API Key is missing. Check your VITE_FIREBASE_API_KEY environment variable.";
+  console.error(errorMessage);
+  // Cast import.meta to any to resolve TS error: Property 'env' does not exist on type 'ImportMeta'
+  if ((import.meta as any).env.PROD) {
+    throw new Error(errorMessage);
+  }
+}
+
+// Singleton pattern for Firebase initialization
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
@@ -86,7 +94,7 @@ export const addCredits = async (uid: string, amount: number) => {
   const userRef = doc(db, 'users', uid);
   await updateDoc(userRef, {
     credits: increment(amount),
-    tier: 'paid' // Upgrade to paid tier on any purchase
+    tier: 'paid'
   });
 };
 
@@ -105,7 +113,6 @@ export const getPublicFeed = async () => {
       limit(12)
     );
     const snap = await getDocs(q);
-    // Fix: Spread types may only be created from object types by casting doc.data() to Record<string, any>
     return snap.docs.map(doc => ({ id: doc.id, ...(doc.data() as Record<string, any>) } as GeneratedImage));
   } catch (error) {
     console.error("Error fetching feed:", error);
@@ -114,9 +121,6 @@ export const getPublicFeed = async () => {
 };
 
 export const toggleLikeImage = async (imageId: string, userId: string) => {
-  // In a real app, use a subcollection 'likes' to prevent duplicate likes
-  // For this simplified version, we just increment/decrement
-  // and store a local storage flag or rely on optimistic UI for now
   const imgRef = doc(db, 'images', imageId);
   await updateDoc(imgRef, {
     likes: increment(1)
@@ -130,21 +134,18 @@ export const getUserHistory = async (uid: string) => {
     orderBy('createdAt', 'desc')
   );
   const snap = await getDocs(q);
-  // Fix: Spread types may only be created from object types by casting doc.data() to Record<string, any>
   return snap.docs.map(doc => ({ id: doc.id, ...(doc.data() as Record<string, any>) } as GeneratedImage));
 };
 
 export const getAllImagesAdmin = async () => {
   const q = query(collection(db, 'images'), orderBy('createdAt', 'desc'), limit(50));
   const snap = await getDocs(q);
-  // Fix: Spread types may only be created from object types by casting doc.data() to Record<string, any>
   return snap.docs.map(doc => ({ id: doc.id, ...(doc.data() as Record<string, any>) } as GeneratedImage));
 };
 
 export const deleteImage = async (imageId: string) => {
-    // Basic delete
     await updateDoc(doc(db, 'images', imageId), {
-        isPublic: false // Soft delete for demo
+        isPublic: false
     });
 };
 
