@@ -46,18 +46,18 @@ const Pricing: React.FC<PricingProps> = ({ user, onOpenAuth }) => {
   };
 
   return (
-    <div className="py-16 bg-slate-50">
+    <div className="py-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">Simple, Transparent Pricing</h2>
-          <p className="mt-4 text-lg text-slate-600">Buy credits as you go. No hidden monthly subscriptions.</p>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">Simple, Transparent Pricing</h2>
+          <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">Buy credits as you go. No hidden monthly subscriptions.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {PLANS.map((plan) => (
             <div 
               key={plan.id}
-              className={`relative bg-white rounded-2xl shadow-lg border p-8 flex flex-col ${plan.popular ? 'border-indigo-500 ring-2 ring-indigo-500 ring-opacity-50 scale-105 z-10' : 'border-slate-200'}`}
+              className={`relative bg-white dark:bg-slate-900 rounded-2xl shadow-lg border p-8 flex flex-col transition-colors duration-300 ${plan.popular ? 'border-indigo-500 ring-2 ring-indigo-500 ring-opacity-50 scale-105 z-10' : 'border-slate-200 dark:border-slate-800'}`}
             >
               {plan.popular && (
                 <div className="absolute top-0 right-0 -mt-3 mr-3 px-3 py-1 bg-gradient-to-r from-indigo-500 to-sky-500 text-white text-xs font-bold rounded-full uppercase tracking-wide">
@@ -66,15 +66,15 @@ const Pricing: React.FC<PricingProps> = ({ user, onOpenAuth }) => {
               )}
               
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">{plan.name}</h3>
                 <div className="flex items-baseline mt-2">
-                  <span className="text-3xl font-bold text-slate-900">₹{plan.price}</span>
-                  <span className="ml-2 text-slate-500 text-sm">/ one-time</span>
+                  <span className="text-3xl font-bold text-slate-900 dark:text-white">₹{plan.price}</span>
+                  <span className="ml-2 text-slate-500 dark:text-slate-400 text-sm">/ one-time</span>
                 </div>
               </div>
 
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-6 text-amber-600 font-bold bg-amber-50 p-3 rounded-lg w-fit">
+                <div className="flex items-center gap-2 mb-6 text-amber-600 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg w-fit">
                    <Coins size={20} />
                    {plan.credits} Credits
                 </div>
@@ -82,7 +82,7 @@ const Pricing: React.FC<PricingProps> = ({ user, onOpenAuth }) => {
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start">
                       <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
-                      <span className="text-slate-600 text-sm">{feature}</span>
+                      <span className="text-slate-600 dark:text-slate-400 text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -93,8 +93,8 @@ const Pricing: React.FC<PricingProps> = ({ user, onOpenAuth }) => {
                 disabled={!!processingId}
                 className={`w-full py-3 px-4 rounded-xl font-semibold transition-all ${
                   plan.popular 
-                    ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200' 
-                    : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-none' 
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
                 } disabled:opacity-70 disabled:cursor-not-allowed`}
               >
                 {processingId === plan.id ? 'Processing UPI...' : 'Buy Now'}

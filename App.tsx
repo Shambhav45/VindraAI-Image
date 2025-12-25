@@ -17,12 +17,12 @@ import Admin from './pages/Admin';
 import Contact from './pages/Contact';
 import Legal from './pages/Legal';
 
-// Global Ad Component
+// Fixed Bottom Ad Component
 const AdBanner = () => (
-  <div className="w-full bg-white border-t border-slate-200 py-4 flex justify-center items-center min-h-[100px] overflow-hidden">
-    <div className="text-xs text-slate-400 border border-slate-200 border-dashed px-10 py-4 rounded">
-      Google AdSense Space (100% compliant)
-      {/* In production, the AdSense script from index.html injects here via <ins> tags */}
+  <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-[100] h-[30px] md:h-[45px] flex justify-center items-center transition-colors duration-300">
+    <div className="text-[10px] text-slate-300 dark:text-slate-600 border border-slate-100 dark:border-slate-800 px-2 py-0.5 rounded bg-slate-50 dark:bg-slate-800 uppercase tracking-widest scale-90">
+      Ad Space
+      {/* In production, the AdSense script injects here */}
     </div>
   </div>
 );
@@ -32,19 +32,39 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<AppMode>(AppMode.EXPLORE);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+
+  // Theme Initialization
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+    // Default is 'dark' via initial state
+  }, []);
+
+  // Theme Application
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Sync user ensures db doc exists and returns profile
         const profile = await syncUserToFirestore(firebaseUser);
         setUser(profile);
-        // Listen for real-time credit updates in a real app, 
-        // here we rely on page refreshes or action triggers to update local state lightly
-        // For production, use onSnapshot on the user doc.
       } else {
         setUser(null);
-        setMode(AppMode.EXPLORE); // Reset to explore on logout
+        setMode(AppMode.EXPLORE);
       }
       setLoading(false);
     });
@@ -54,7 +74,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
@@ -62,12 +82,14 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-slate-50 font-inter">
+      <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 font-inter transition-colors duration-300">
         <Navbar 
           user={user} 
           mode={mode} 
           setMode={setMode} 
-          onOpenAuth={() => setIsAuthOpen(true)} 
+          onOpenAuth={() => setIsAuthOpen(true)}
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
         
         <main className="flex-grow">
@@ -95,7 +117,8 @@ const App: React.FC = () => {
 
         <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
         
-        {/* Ads do not show on login/signup (Modal is overlay), but stick to bottom of content pages */}
+        {/* Fixed Ad Banner at bottom */}
+        <div className="h-[30px] md:h-[45px]"></div> {/* Spacer */}
         <AdBanner />
         
         <Footer />

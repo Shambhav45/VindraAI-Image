@@ -3,8 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lumina AI - Generate Art with Gemini</title>
+    <title>Vindra AI - Create Art with Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Google AdSense Placeholder -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
@@ -13,8 +25,11 @@
       /* Custom scrollbar for sleeker look */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: #f1f5f9; }
+      .dark ::-webkit-scrollbar-track { background: #0f172a; }
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      .dark ::-webkit-scrollbar-thumb { background: #334155; }
       ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+      .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
   <script type="importmap">
 {
@@ -30,7 +45,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 text-slate-900 antialiased">
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 antialiased mb-16 md:mb-0 transition-colors duration-300">
     <div id="root"></div>
   </body>
 </html>

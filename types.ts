@@ -5,6 +5,7 @@ export interface UserProfile {
   photoURL: string | null;
   credits: number;
   role: 'user' | 'admin';
+  tier: 'free' | 'paid';
   createdAt: number;
 }
 
@@ -16,6 +17,7 @@ export interface GeneratedImage {
   imageUrl: string; // Base64 or URL
   createdAt: number;
   isPublic: boolean;
+  likes: number;
   userEmail?: string; // For admin view
 }
 

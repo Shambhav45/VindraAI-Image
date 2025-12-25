@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Mail, Lock, AlertCircle, Loader2, Gift } from 'lucide-react';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -58,27 +58,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-300 border border-slate-200 dark:border-slate-800">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition"
+          className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
         >
           <X size={20} />
         </button>
         
         <div className="p-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-slate-500 text-sm">
-              {isLogin ? 'Login to continue creating amazing art' : 'Sign up and get 25 free credits'}
-            </p>
+            <div className="flex items-center justify-center gap-2 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-4 py-2 rounded-full text-sm font-bold border border-amber-100 dark:border-amber-800/50 mx-auto w-fit mt-2">
+                <Gift size={16} />
+                <span>New users get 25 Free Credits!</span>
+            </div>
           </div>
 
           <form onSubmit={handleAuth} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 text-slate-400" size={18} />
                 <input
@@ -86,14 +87,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-900 dark:text-white"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 text-slate-400" size={18} />
                 <input
@@ -101,14 +102,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-900 dark:text-white"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-100">
+              <div className="flex items-center gap-2 text-red-500 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-100 dark:border-red-900/30">
                 <AlertCircle size={16} />
                 {error}
               </div>
@@ -120,17 +121,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               className="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="animate-spin" size={18} />}
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {isLogin ? 'Sign In' : 'Sign Up & Claim Credits'}
             </button>
           </form>
 
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200"></div>
+                <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">Or continue with</span>
+                <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">Or continue with</span>
               </div>
             </div>
 
@@ -138,7 +139,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               type="button"
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="mt-4 w-full bg-white border border-slate-300 text-slate-700 py-2.5 rounded-lg font-medium hover:bg-slate-50 transition flex items-center justify-center gap-2"
+              className="mt-4 w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -163,12 +164,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div className="mt-6 text-center text-sm">
-            <span className="text-slate-500">
+            <span className="text-slate-500 dark:text-slate-400">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
             </span>
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-indigo-600 font-semibold hover:underline"
+              className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
             >
               {isLogin ? 'Sign up' : 'Log in'}
             </button>

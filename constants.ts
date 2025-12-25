@@ -12,14 +12,14 @@ export const PLANS: CreditPlan[] = [
     name: 'Starter',
     credits: 50,
     price: 49,
-    features: ['50 Credits', 'Standard Speed', 'No Ads on Generate', 'Email Support']
+    features: ['50 Credits', 'Remove Watermark', 'Standard Speed', 'Email Support']
   },
   {
     id: 'growth',
     name: 'Growth',
     credits: 150,
     price: 129,
-    features: ['150 Credits', 'Fast Generation', 'Priority Support', 'Public Profile'],
+    features: ['150 Credits', 'Remove Watermark', 'Fast Generation', 'Priority Support'],
     popular: true
   },
   {
@@ -27,7 +27,7 @@ export const PLANS: CreditPlan[] = [
     name: 'Pro',
     credits: 400,
     price: 299,
-    features: ['400 Credits', 'Max Speed', 'Commercial License', 'Dedicated Support']
+    features: ['400 Credits', 'Remove Watermark', 'Max Speed', 'Commercial License']
   }
 ];
 
@@ -38,5 +38,13 @@ export const IMAGE_STYLES = [
   { id: 'anime', label: 'Anime' },
   { id: 'illustration', label: 'Illustration' },
   { id: 'cyberpunk', label: 'Cyberpunk' },
-  { id: 'oil_painting', label: 'Oil Painting' }
+  { id: 'oil_painting', label: 'Oil Painting' },
+  { id: '3d_render', label: '3D Render' }
+];
+
+export const PROMPT_PRESETS = [
+  { id: 'social', label: 'Instagram', suffix: ', aesthetic, trendy, square ratio, high detail, social media style' },
+  { id: 'youtube', label: 'Thumbnail', suffix: ', high contrast, catchy, vibrant colors, 4k, detailed, face focus' },
+  { id: 'wallpaper', label: 'Wallpaper', suffix: ', wide angle, 8k resolution, atmospheric, cinematic lighting, masterpiece' },
+  { id: 'logo', label: 'Logo', suffix: ', vector art, minimal, simple, flat design, icon, white background' }
 ];

@@ -28,21 +28,21 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
     setLoading(false);
   };
 
-  if (loading) return <div className="p-12 text-center"><Loader2 className="animate-spin inline" /></div>;
+  if (loading) return <div className="p-12 text-center text-slate-600 dark:text-slate-400"><Loader2 className="animate-spin inline" /></div>;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
-        <ShieldAlert className="text-indigo-600" /> Admin Dashboard
+    <div className="max-w-7xl mx-auto px-4 py-12 min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+        <ShieldAlert className="text-indigo-600 dark:text-indigo-400" /> Admin Dashboard
       </h1>
 
-      <div className="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
-          <h2 className="font-semibold text-lg">Recent Generations (Global)</h2>
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+          <h2 className="font-semibold text-lg text-slate-900 dark:text-white">Recent Generations (Global)</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-slate-600">
-            <thead className="bg-slate-50 text-slate-700 uppercase">
+          <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
+            <thead className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase">
               <tr>
                 <th className="px-6 py-3">Image</th>
                 <th className="px-6 py-3">Prompt</th>
@@ -53,7 +53,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
             </thead>
             <tbody>
               {images.map((img) => (
-                <tr key={img.id} className="border-b hover:bg-slate-50">
+                <tr key={img.id} className="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
                   <td className="px-6 py-4">
                     <img src={img.imageUrl} alt="thumb" className="w-16 h-10 object-cover rounded" />
                   </td>
@@ -61,7 +61,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                   <td className="px-6 py-4">{img.userId.slice(0, 8)}...</td>
                   <td className="px-6 py-4">{new Date(img.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
-                    <button className="text-red-600 hover:underline">Delete</button>
+                    <button className="text-red-600 dark:text-red-400 hover:underline">Delete</button>
                   </td>
                 </tr>
               ))}
